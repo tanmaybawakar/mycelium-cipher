@@ -1,9 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
-
-// ============================================================================
-// Mycelium Cipher — AI Company OS shell
-// Single-file App.tsx (React + TypeScript, no external UI libs)
-// ============================================================================
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
+import "./index.css";
 
 const COLORS = {
   bg: "#343E40",
@@ -34,14 +36,21 @@ type ViewKey =
   | "integrations"
   | "settings";
 
-// ----------------------------------------------------------------------------
-// Icons (inline SVG)
-// ----------------------------------------------------------------------------
 type IconProps = { size?: number; color?: string };
 
+// Simple inline icons so nothing is empty / broken
 const Icon = {
   Grid: ({ size = 18, color = "currentColor" }: IconProps) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <rect x="3" y="3" width="7" height="7" rx="1.5" />
       <rect x="14" y="3" width="7" height="7" rx="1.5" />
       <rect x="3" y="14" width="7" height="7" rx="1.5" />
@@ -49,54 +58,110 @@ const Icon = {
     </svg>
   ),
   Hierarchy: ({ size = 18, color = "currentColor" }: IconProps) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="9" y="2" width="6" height="5" rx="1" />
-      <rect x="2" y="17" width="6" height="5" rx="1" />
-      <rect x="9" y="17" width="6" height="5" rx="1" />
-      <rect x="16" y="17" width="6" height="5" rx="1" />
-      <path d="M12 7v4M5 17v-2h14v2M12 11v4" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="5" r="2.2" />
+      <circle cx="6" cy="19" r="2.2" />
+      <circle cx="18" cy="19" r="2.2" />
+      <path d="M12 7.5v3.5M10 11h4M9 13.5l-2 3M15 13.5l2 3" />
     </svg>
   ),
   Council: ({ size = 18, color = "currentColor" }: IconProps) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <ellipse cx="12" cy="13" rx="8" ry="3.5" />
-      <circle cx="12" cy="5" r="1.8" />
-      <circle cx="4.5" cy="11" r="1.6" />
-      <circle cx="19.5" cy="11" r="1.6" />
-      <circle cx="7" cy="17.5" r="1.6" />
-      <circle cx="17" cy="17.5" r="1.6" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="7" />
+      <path d="M12 5v2M12 17v2M5 12h2M17 12h2M8.5 8.5l1.4 1.4M14.1 14.1l1.4 1.4M15.5 8.5l-1.4 1.4M9.9 14.1l-1.4 1.4" />
     </svg>
   ),
   Pulse: ({ size = 18, color = "currentColor" }: IconProps) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M2 12h4l2-7 4 14 2-9 2 5h6" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 12h4l2-6 4 12 2-6h4" />
     </svg>
   ),
   Target: ({ size = 18, color = "currentColor" }: IconProps) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="9" />
-      <circle cx="12" cy="12" r="5.5" />
-      <circle cx="12" cy="12" r="2" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="7" />
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 5V3M5 12H3M12 21v-2M21 12h-2" />
     </svg>
   ),
   Wallet: ({ size = 18, color = "currentColor" }: IconProps) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 7a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v3" />
-      <rect x="3" y="7" width="18" height="13" rx="2" />
-      <circle cx="16.5" cy="13.5" r="1.2" fill={color} stroke="none" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="3" y="6" width="18" height="12" rx="2" />
+      <path d="M16 12h4M7 9h7" />
     </svg>
   ),
   Plug: ({ size = 18, color = "currentColor" }: IconProps) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M9 2v4M15 2v4" />
-      <path d="M7 6h10v5a5 5 0 0 1-10 0V6Z" />
-      <path d="M12 16v6" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9 3v4M15 3v4M8 13h8" />
+      <path d="M9 13v3a3 3 0 0 0 6 0v-3" />
     </svg>
   ),
   Gear: ({ size = 18, color = "currentColor" }: IconProps) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <circle cx="12" cy="12" r="3" />
-      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z" />
+      <path d="M19.4 15a1.78 1.78 0 0 0 .35 1.95l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.78 1.78 0 0 0 15 19.4a1.78 1.78 0 0 0-1 .33 1.78 1.78 0 0 0-.67 1.44V22a2 2 0 0 1-4 0v-.83A1.78 1.78 0 0 0 8 19.4a1.78 1.78 0 0 0-1.95-.35l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.78 1.78 0 0 0 4.6 15a1.78 1.78 0 0 0-.33-1 1.78 1.78 0 0 0-1.44-.67H2a2 2 0 0 1 0-4h.83A1.78 1.78 0 0 0 4.6 8a1.78 1.78 0 0 0-.33-1 1.78 1.78 0 0 0-1.44-.67L2 6.17a2 2 0 0 1 4 0V7a1.78 1.78 0 0 0 1 .33A1.78 1.78 0 0 0 9 4.6V4.6A1.78 1.78 0 0 0 10 4.27a1.78 1.78 0 0 0 .67-1.44V2a2 2 0 0 1 4 0v.83A1.78 1.78 0 0 0 16 4.6a1.78 1.78 0 0 0 1 .33 1.78 1.78 0 0 0 1.95-.35l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.78 1.78 0 0 0 19.4 9a1.78 1.78 0 0 0 .33 1A1.78 1.78 0 0 0 21.17 11H22a2 2 0 0 1 0 4h-.83A1.78 1.78 0 0 0 19.4 15Z" />
     </svg>
   ),
 };
@@ -112,20 +177,16 @@ const NAV: { key: ViewKey; label: string; icon: React.FC<IconProps> }[] = [
   { key: "settings", label: "Settings", icon: Icon.Gear },
 ];
 
-// ----------------------------------------------------------------------------
-// Mycelium network canvas (used both as sidebar header bg + dashboard bg)
-// ----------------------------------------------------------------------------
-type MyceliumCanvasProps = {
+type BackendStatus = "running" | "offline" | "checking";
+
+const MyceliumCanvas: React.FC<{
   density?: number;
   opacity?: number;
   speed?: number;
   linkDistance?: number;
   lineWidth?: number;
-  className?: string;
   style?: React.CSSProperties;
-};
-
-const MyceliumCanvas: React.FC<MyceliumCanvasProps> = ({
+}> = ({
   density = 0.00012,
   opacity = 0.15,
   speed = 0.6,
@@ -133,145 +194,134 @@ const MyceliumCanvas: React.FC<MyceliumCanvasProps> = ({
   lineWidth = 0.7,
   style,
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const rafRef = useRef<number | null>(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const rafRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    useEffect(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
 
-    let width = 0;
-    let height = 0;
-    let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      let width = 0;
+      let height = 0;
+      let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
 
-    type Node = { x: number; y: number; vx: number; vy: number; r: number };
-    let nodes: Node[] = [];
+      type Node = { x: number; y: number; vx: number; vy: number; r: number };
+      let nodes: Node[] = [];
 
-    const resize = () => {
-      const parent = canvas.parentElement;
-      if (!parent) return;
-      const rect = parent.getBoundingClientRect();
-      width = rect.width;
-      height = rect.height;
-      dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-      canvas.width = Math.max(1, Math.floor(width * dpr));
-      canvas.height = Math.max(1, Math.floor(height * dpr));
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const resize = () => {
+        const parent = canvas.parentElement;
+        if (!parent) return;
+        const rect = parent.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+        canvas.width = Math.max(1, Math.floor(width * dpr));
+        canvas.height = Math.max(1, Math.floor(height * dpr));
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const target = Math.max(8, Math.floor(width * height * density));
-      nodes = new Array(target).fill(0).map(() => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * speed * 0.016,
-        vy: (Math.random() - 0.5) * speed * 0.016,
-        r: 0.8 + Math.random() * 1.2,
-      }));
-    };
+        const target = Math.max(8, Math.floor(width * height * density));
+        nodes = new Array(target).fill(0).map(() => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * speed * 0.016,
+          vy: (Math.random() - 0.5) * speed * 0.016,
+          r: 0.8 + Math.random() * 1.2,
+        }));
+      };
 
-    resize();
-    const ro = new ResizeObserver(resize);
-    if (canvas.parentElement) ro.observe(canvas.parentElement);
+      resize();
+      const ro = new ResizeObserver(resize);
+      if (canvas.parentElement) ro.observe(canvas.parentElement);
 
-    let last = performance.now();
-    const tick = (now: number) => {
-      const dt = Math.min(64, now - last);
-      last = now;
+      let last = performance.now();
+      const tick = (now: number) => {
+        const dt = Math.min(64, now - last);
+        last = now;
+        ctx.clearRect(0, 0, width, height);
 
-      ctx.clearRect(0, 0, width, height);
+        // move
+        for (const n of nodes) {
+          n.x += n.vx * dt;
+          n.y += n.vy * dt;
+          if (n.x < -20) n.x = width + 20;
+          if (n.x > width + 20) n.x = -20;
+          if (n.y < -20) n.y = height + 20;
+          if (n.y > height + 20) n.y = -20;
+        }
 
-      // drift nodes
-      for (const n of nodes) {
-        n.x += n.vx * dt;
-        n.y += n.vy * dt;
-        if (n.x < -20) n.x = width + 20;
-        if (n.x > width + 20) n.x = -20;
-        if (n.y < -20) n.y = height + 20;
-        if (n.y > height + 20) n.y = -20;
-      }
-
-      // links
-      ctx.lineWidth = lineWidth;
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const a = nodes[i];
-          const b = nodes[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const d2 = dx * dx + dy * dy;
-          const max2 = linkDistance * linkDistance;
-          if (d2 < max2) {
-            const t = 1 - Math.sqrt(d2) / linkDistance;
-            const alpha = opacity * t;
-            ctx.strokeStyle = `rgba(225,173,1,${alpha.toFixed(3)})`;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
+        // links
+        ctx.lineWidth = lineWidth;
+        for (let i = 0; i < nodes.length; i += 1) {
+          for (let j = i + 1; j < nodes.length; j += 1) {
+            const a = nodes[i];
+            const b = nodes[j];
+            const dx = a.x - b.x;
+            const dy = a.y - b.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < linkDistance) {
+              const t = 1 - dist / linkDistance;
+              ctx.strokeStyle = `rgba(225,173,1,${(opacity * t).toFixed(3)})`;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            }
           }
         }
-      }
 
-      // nodes
-      for (const n of nodes) {
+        // nodes
         ctx.fillStyle = `rgba(225,173,1,${(opacity * 1.2).toFixed(3)})`;
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
+        for (const n of nodes) {
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        rafRef.current = requestAnimationFrame(tick);
+      };
 
       rafRef.current = requestAnimationFrame(tick);
-    };
-    rafRef.current = requestAnimationFrame(tick);
 
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-      ro.disconnect();
-    };
-  }, [density, opacity, speed, linkDistance, lineWidth]);
+      return () => {
+        if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+        ro.disconnect();
+      };
+    }, [density, opacity, speed, linkDistance, lineWidth]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        ...style,
-      }}
-    />
-  );
-};
-
-// ----------------------------------------------------------------------------
-// Sidebar
-// ----------------------------------------------------------------------------
-type BackendStatus = "running" | "offline" | "checking";
+    return (
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          ...style,
+        }}
+      />
+    );
+  };
 
 const StatusDot: React.FC<{ status: BackendStatus | "idle" }> = ({ status }) => {
   const color =
     status === "running"
       ? "#3DDC84"
       : status === "offline"
-      ? "#E55353"
-      : status === "checking"
-      ? "#E1AD01"
-      : "#7A8385";
+        ? "#E55353"
+        : status === "checking"
+          ? COLORS.moss
+          : "#7A8385";
   return (
     <span
       style={{
-        display: "inline-block",
         width: 8,
         height: 8,
         borderRadius: 999,
-        background: color,
-        boxShadow: `0 0 8px ${color}`,
-        transition: "background 300ms ease, box-shadow 300ms ease",
+        display: "inline-block",
+        backgroundColor: color,
       }}
     />
   );
@@ -290,8 +340,9 @@ const NavItem: React.FC<NavItemProps> = ({ label, active, IconCmp, onClick }) =>
   const bg = active
     ? "rgba(225,173,1,0.08)"
     : hover
-    ? "rgba(255,255,255,0.04)"
-    : "transparent";
+      ? "rgba(255,255,255,0.04)"
+      : "transparent";
+
   return (
     <button
       type="button"
@@ -319,18 +370,25 @@ const NavItem: React.FC<NavItemProps> = ({ label, active, IconCmp, onClick }) =>
       }}
     >
       {active && (
-        <span
+        <div
           style={{
             position: "absolute",
             left: 0,
             top: 0,
             bottom: 0,
             width: 3,
-            background: COLORS.moss,
+            backgroundColor: COLORS.moss,
           }}
         />
       )}
-      <span style={{ display: "inline-flex", color: textColor, transition: "color 150ms ease" }}>
+      <span
+        style={{
+          width: 20,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <IconCmp size={18} color={textColor} />
       </span>
       <span>{label}</span>
@@ -338,82 +396,114 @@ const NavItem: React.FC<NavItemProps> = ({ label, active, IconCmp, onClick }) =>
   );
 };
 
-const SidebarHeader: React.FC = () => {
-  return (
+const SidebarHeader: React.FC = () => (
+  <div
+    style={{
+      position: "relative",
+      height: 56,
+      padding: "0 18px",
+      display: "flex",
+      alignItems: "center",
+      overflow: "hidden",
+      borderBottom: `1px solid ${COLORS.border}`,
+    }}
+  >
     <div
       style={{
-        position: "relative",
-        height: 56,
-        display: "flex",
-        alignItems: "center",
-        padding: "0 18px",
-        borderBottom: `1px solid ${COLORS.border}`,
-        overflow: "hidden",
+        position: "absolute",
+        inset: 0,
+        opacity: 0.12,
       }}
     >
-      <MyceliumCanvas density={0.00035} opacity={0.18} speed={0.35} linkDistance={70} lineWidth={0.6} />
-      <div style={{ position: "relative", display: "flex", alignItems: "baseline", gap: 8 }}>
-        <span
-          style={{
-            fontFamily: FONT_HEAD,
-            fontStyle: "italic",
-            fontWeight: 600,
-            fontSize: 22,
-            color: COLORS.moss,
-            letterSpacing: 0.3,
-          }}
-        >
-          Mycelium
-        </span>
-        <span
-          style={{
-            fontFamily: FONT_UI,
-            fontWeight: 600,
-            fontSize: 10,
-            color: COLORS.teal,
-            textTransform: "uppercase",
-            letterSpacing: 2,
-          }}
-        >
-          Cipher
-        </span>
+      <MyceliumCanvas
+        density={0.0004}
+        opacity={0.3}
+        linkDistance={100}
+        lineWidth={0.5}
+      />
+    </div>
+    <div style={{ position: "relative", zIndex: 1 }}>
+      <div
+        style={{
+          fontFamily: FONT_HEAD,
+          fontStyle: "italic",
+          fontSize: 22,
+          color: COLORS.moss,
+        }}
+      >
+        Mycelium
+      </div>
+      <div
+        style={{
+          fontFamily: FONT_UI,
+          fontSize: 11,
+          letterSpacing: 2,
+          textTransform: "uppercase",
+          color: COLORS.teal,
+        }}
+      >
+        Cipher
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 const SystemStatusCard: React.FC<{ backend: BackendStatus }> = ({ backend }) => {
   const backendLabel =
-    backend === "running" ? "Running" : backend === "offline" ? "Offline" : "Checking…";
+    backend === "running"
+      ? "Running"
+      : backend === "offline"
+        ? "Offline"
+        : "Checking…";
+
   return (
     <div
       style={{
-        margin: 12,
-        padding: 12,
-        background: "rgba(255,255,255,0.02)",
-        border: `1px solid ${COLORS.border}`,
-        borderRadius: 8,
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
+        padding: 14,
+        borderTop: `1px solid ${COLORS.border}`,
+        fontFamily: FONT_UI,
+        fontSize: 12,
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontFamily: FONT_UI, fontSize: 12, color: COLORS.teal, letterSpacing: 0.4 }}>
-          Backend
-        </span>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 6,
+        }}
+      >
+        <span style={{ color: COLORS.teal, fontWeight: 500 }}>Backend</span>
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            color: COLORS.bone,
+          }}
+        >
           <StatusDot status={backend} />
-          <span style={{ fontFamily: FONT_UI, fontSize: 12, color: COLORS.bone }}>{backendLabel}</span>
+          {backendLabel}
         </span>
       </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontFamily: FONT_UI, fontSize: 12, color: COLORS.teal, letterSpacing: 0.4 }}>
-          Ollama
-        </span>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <span style={{ color: COLORS.teal, fontWeight: 500 }}>Ollama</span>
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            color: COLORS.textDim,
+          }}
+        >
           <StatusDot status="idle" />
-          <span style={{ fontFamily: FONT_UI, fontSize: 12, color: COLORS.bone }}>Not connected</span>
+          Not connected
         </span>
       </div>
     </div>
@@ -426,226 +516,141 @@ type SidebarProps = {
   backend: BackendStatus;
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ current, onSelect, backend }) => {
-  return (
-    <aside
+const Sidebar: React.FC<SidebarProps> = ({ current, onSelect, backend }) => (
+  <aside
+    style={{
+      width: 240,
+      backgroundColor: COLORS.bgSidebar,
+      color: COLORS.bone,
+      display: "flex",
+      flexDirection: "column",
+      borderRight: `1px solid ${COLORS.border}`,
+    }}
+  >
+    <SidebarHeader />
+    <nav
       style={{
-        width: 240,
-        flex: "0 0 240px",
-        background: COLORS.bgSidebar,
-        borderRight: `1px solid ${COLORS.border}`,
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        borderRadius: 0,
+        flex: 1,
+        paddingTop: 6,
       }}
     >
-      <SidebarHeader />
-      <nav style={{ display: "flex", flexDirection: "column", paddingTop: 8 }}>
-        {NAV.map((n) => (
-          <NavItem
-            key={n.key}
-            label={n.label}
-            IconCmp={n.icon}
-            active={current === n.key}
-            onClick={() => onSelect(n.key)}
-          />
-        ))}
-      </nav>
-      <div style={{ flex: 1 }} />
-      <SystemStatusCard backend={backend} />
-    </aside>
-  );
-};
-
-// ----------------------------------------------------------------------------
-// Status bar
-// ----------------------------------------------------------------------------
-const useClock = (): string => {
-  const [now, setNow] = useState<Date>(new Date());
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  return useMemo(
-    () =>
-      now.toLocaleTimeString(undefined, {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      }),
-    [now]
-  );
-};
-
-const StatusBar: React.FC<{ agents: number; mission: string | null }> = ({ agents, mission }) => {
-  const time = useClock();
-  return (
-    <footer
-      style={{
-        height: 32,
-        flex: "0 0 32px",
-        background: COLORS.bgStatus,
-        borderTop: `1px solid ${COLORS.border}`,
-        display: "flex",
-        alignItems: "center",
-        padding: "0 16px",
-        gap: 16,
-        fontFamily: FONT_UI,
-        fontSize: 12,
-        color: COLORS.textDim,
-      }}
-    >
-      <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-        <span
-          style={{
-            display: "inline-block",
-            width: 7,
-            height: 7,
-            borderRadius: 999,
-            background: agents > 0 ? COLORS.moss : "#7A8385",
-            boxShadow: agents > 0 ? `0 0 8px ${COLORS.moss}` : "none",
-          }}
+      {NAV.map((item) => (
+        <NavItem
+          key={item.key}
+          label={item.label}
+          active={current === item.key}
+          IconCmp={item.icon}
+          onClick={() => onSelect(item.key)}
         />
-        <span>{agents} agents active</span>
-      </span>
-      <span style={{ opacity: 0.4 }}>|</span>
-      <span>{mission ?? "No missions running"}</span>
-      <div style={{ flex: 1 }} />
-      <span style={{ color: COLORS.bone, fontVariantNumeric: "tabular-nums", letterSpacing: 0.5 }}>
-        {time}
-      </span>
-    </footer>
-  );
-};
+      ))}
+    </nav>
+    <SystemStatusCard backend={backend} />
+  </aside>
+);
 
-// ----------------------------------------------------------------------------
-// Dashboard view
-// ----------------------------------------------------------------------------
-const LaunchButton: React.FC = () => {
-  const [hover, setHover] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    const id = setTimeout(() => setMounted(true), 200);
-    return () => clearTimeout(id);
-  }, []);
-  return (
-    <button
-      type="button"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        width: "100%",
-        height: 52,
-        border: "none",
-        borderRadius: 8,
-        background: COLORS.moss,
-        color: COLORS.ink,
-        fontFamily: FONT_UI,
-        fontWeight: 600,
-        fontSize: 16,
-        letterSpacing: 0.3,
-        cursor: "pointer",
-        filter: hover ? "brightness(1.1)" : "brightness(1)",
-        boxShadow: hover ? `0 0 20px rgba(225,173,1,0.4)` : "0 0 0 rgba(0,0,0,0)",
-        opacity: mounted ? 1 : 0,
-        transform: mounted ? "translateY(0)" : "translateY(8px)",
-        transition:
-          "opacity 400ms ease-out, transform 400ms ease-out, filter 200ms ease, box-shadow 200ms ease",
-      }}
-    >
-      Launch Company →
-    </button>
-  );
-};
-
-const DashboardView: React.FC = () => {
-  return (
+const DashboardView: React.FC = () => (
+  <div
+    style={{
+      position: "relative",
+      width: "100%",
+      height: "100%",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      overflow: "hidden",
+    }}
+  >
+    <MyceliumCanvas />
     <div
       style={{
         position: "relative",
-        width: "100%",
-        height: "100%",
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        zIndex: 1,
+        width: 600,
+        maxWidth: "90%",
+        backgroundColor: COLORS.bgCardDeep,
+        borderRadius: 8,
+        border: `1px solid ${COLORS.border}`,
+        boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
+        padding: 40,
+        textAlign: "center",
       }}
     >
-      <MyceliumCanvas density={0.00009} opacity={0.15} speed={0.7} linkDistance={170} />
       <div
         style={{
-          position: "relative",
-          width: 600,
-          maxWidth: "calc(100% - 48px)",
-          background: COLORS.bgCardDeep,
-          border: `1px solid ${COLORS.border}`,
-          borderRadius: 8,
-          boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
-          padding: 40,
-          display: "flex",
-          flexDirection: "column",
-          gap: 18,
+          fontFamily: FONT_UI,
+          fontSize: 11,
+          letterSpacing: 4,
+          textTransform: "uppercase",
+          color: COLORS.teal,
+          marginBottom: 16,
         }}
       >
-        <span
-          style={{
-            fontFamily: FONT_UI,
-            fontWeight: 600,
-            fontSize: 11,
-            color: COLORS.teal,
-            textTransform: "uppercase",
-            letterSpacing: 4,
-          }}
-        >
-          Ready
-        </span>
-        <h1
-          style={{
-            margin: 0,
-            fontFamily: FONT_HEAD,
-            fontWeight: 500,
-            fontSize: 36,
-            color: COLORS.bone,
-            lineHeight: 1.1,
-          }}
-        >
-          No company running.
-        </h1>
-        <p
-          style={{
-            margin: 0,
-            fontFamily: FONT_UI,
-            fontSize: 16,
-            color: COLORS.textSubtitle,
-            lineHeight: 1.5,
-          }}
-        >
-          Define your mission. Mycelium does the rest.
-        </p>
-        <div style={{ height: 8 }} />
-        <LaunchButton />
-        <span
-          style={{
-            fontFamily: FONT_UI,
-            fontSize: 11,
-            color: COLORS.textDimmer,
-            textAlign: "center",
-            letterSpacing: 0.4,
-          }}
-        >
-          Powered by Mycelium Cipher
-        </span>
+        READY
+      </div>
+      <div
+        style={{
+          fontFamily: FONT_HEAD,
+          fontSize: 36,
+          color: COLORS.bone,
+          marginBottom: 12,
+        }}
+      >
+        No company running.
+      </div>
+      <div
+        style={{
+          fontFamily: FONT_UI,
+          fontSize: 16,
+          color: COLORS.textSubtitle,
+          marginBottom: 32,
+        }}
+      >
+        Define your mission. Mycelium does the rest.
+      </div>
+      <button
+        type="button"
+        style={{
+          width: "100%",
+          height: 52,
+          borderRadius: 8,
+          border: "none",
+          backgroundColor: COLORS.moss,
+          color: COLORS.ink,
+          fontFamily: FONT_UI,
+          fontWeight: 600,
+          fontSize: 16,
+          cursor: "pointer",
+          boxShadow: "0 0 0 rgba(0,0,0,0)",
+          transition: "box-shadow 200ms ease, filter 200ms ease",
+        }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLButtonElement).style.filter = "brightness(1.1)";
+          (e.currentTarget as HTMLButtonElement).style.boxShadow =
+            "0 0 20px rgba(225,173,1,0.4)";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLButtonElement).style.filter = "none";
+          (e.currentTarget as HTMLButtonElement).style.boxShadow =
+            "0 0 0 rgba(0,0,0,0)";
+        }}
+      >
+        Launch Company →
+      </button>
+      <div
+        style={{
+          marginTop: 14,
+          fontFamily: FONT_UI,
+          fontSize: 11,
+          color: COLORS.textDimmer,
+        }}
+      >
+        Powered by Mycelium Cipher
       </div>
     </div>
-  );
-};
+  </div>
+);
 
-// ----------------------------------------------------------------------------
-// Placeholder view
-// ----------------------------------------------------------------------------
-const PlaceholderView: React.FC<{ name: string }> = ({ name }) => (
+const PlaceholderView: React.FC<{ label: string }> = ({ label }) => (
   <div
     style={{
       width: "100%",
@@ -654,124 +659,132 @@ const PlaceholderView: React.FC<{ name: string }> = ({ name }) => (
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      gap: 12,
-      padding: 24,
     }}
   >
-    <h2
+    <div
       style={{
-        margin: 0,
         fontFamily: FONT_HEAD,
-        fontWeight: 500,
         fontSize: 28,
         color: COLORS.bone,
+        marginBottom: 8,
       }}
     >
-      {name}
-    </h2>
-    <p
+      {label}
+    </div>
+    <div
       style={{
-        margin: 0,
         fontFamily: FONT_UI,
         fontSize: 14,
         color: COLORS.textDim,
       }}
     >
       Coming in next layer.
-    </p>
+    </div>
   </div>
 );
 
-// ----------------------------------------------------------------------------
-// Main App
-// ----------------------------------------------------------------------------
-const useBackendHealth = (): BackendStatus => {
-  const [status, setStatus] = useState<BackendStatus>("checking");
+const App: React.FC = () => {
+  const [view, setView] = useState<ViewKey>("dashboard");
+  const [backendStatus, setBackendStatus] = useState<BackendStatus>("checking");
+  const [clock, setClock] = useState<string>(new Date().toLocaleTimeString());
+
+  // backend health
   useEffect(() => {
-    let cancelled = false;
     const check = async () => {
       try {
-        const ctrl = new AbortController();
-        const timeout = setTimeout(() => ctrl.abort(), 2500);
-        const res = await fetch("http://localhost:3100/health", {
-          method: "GET",
-          signal: ctrl.signal,
-        });
-        clearTimeout(timeout);
-        if (cancelled) return;
-        setStatus(res.ok ? "running" : "offline");
+        const res = await fetch("http://localhost:3100/health");
+        setBackendStatus(res.ok ? "running" : "offline");
       } catch {
-        if (cancelled) return;
-        setStatus("offline");
+        setBackendStatus("offline");
       }
     };
     check();
     const id = setInterval(check, 5000);
-    return () => {
-      cancelled = true;
-      clearInterval(id);
-    };
+    return () => clearInterval(id);
   }, []);
-  return status;
-};
 
-const App: React.FC = () => {
-  const [view, setView] = useState<ViewKey>("dashboard");
-  const backend = useBackendHealth();
+  // clock
+  useEffect(() => {
+    const id = setInterval(
+      () => setClock(new Date().toLocaleTimeString()),
+      1000
+    );
+    return () => clearInterval(id);
+  }, []);
 
-  const handleSelect = useCallback((k: ViewKey) => setView(k), []);
-
-  const content = useMemo(() => {
-    switch (view) {
-      case "dashboard":
-        return <DashboardView />;
-      case "org":
-        return <PlaceholderView name="Org Chart" />;
-      case "council":
-        return <PlaceholderView name="Council Board" />;
-      case "activity":
-        return <PlaceholderView name="Agent Activity" />;
-      case "missions":
-        return <PlaceholderView name="Missions" />;
-      case "budget":
-        return <PlaceholderView name="Budget" />;
-      case "integrations":
-        return <PlaceholderView name="Integrations" />;
-      case "settings":
-        return <PlaceholderView name="Settings" />;
-      default:
-        return null;
-    }
-  }, [view]);
+  const currentLabel = useMemo(
+    () => NAV.find((n) => n.key === view)?.label ?? "",
+    [view]
+  );
 
   return (
     <div
       style={{
-        position: "fixed",
-        inset: 0,
         display: "flex",
-        flexDirection: "column",
-        background: COLORS.bg,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: COLORS.bg,
         color: COLORS.bone,
-        fontFamily: FONT_UI,
         overflow: "hidden",
       }}
     >
-      <div style={{ flex: 1, display: "flex", minHeight: 0 }}>
-        <Sidebar current={view} onSelect={handleSelect} backend={backend} />
-        <main
+      <Sidebar current={view} onSelect={setView} backend={backendStatus} />
+      <div
+        style={{
+          position: "relative",
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <div
           style={{
             flex: 1,
-            minWidth: 0,
-            background: COLORS.bg,
-            overflow: "auto",
             position: "relative",
+            overflow: "hidden",
           }}
         >
-          {content}
-        </main>
+          {view === "dashboard" ? (
+            <DashboardView />
+          ) : (
+            <PlaceholderView label={currentLabel} />
+          )}
+        </div>
+        <div
+          style={{
+            height: 32,
+            backgroundColor: COLORS.bgStatus,
+            borderTop: `1px solid ${COLORS.border}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "0 16px",
+            fontFamily: FONT_UI,
+            fontSize: 12,
+            color: COLORS.textDim,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
+            <span style={{ color: "#6b7280", fontSize: 8 }}>●</span>
+            <span>0 agents active</span>
+            <span style={{ color: COLORS.textDimmer }}>|</span>
+            <span>No missions running</span>
+          </div>
+          <div
+            style={{
+              fontVariantNumeric: "tabular-nums",
+            }}
+          >
+            {clock}
+          </div>
+        </div>
       </div>
-      <StatusBar agents={0} mission={null} />
     </div>
   );
 };

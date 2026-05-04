@@ -51,11 +51,11 @@ function createMainWindow() {
     // Dev: load from Vite. Prod: load built file
     const isDev = process.env.NODE_ENV === 'development'
 
+    // dev:
     if (isDev) {
-        mainWindow.loadURL('http://localhost:3100')
-        mainWindow.webContents.openDevTools({ mode: 'detach' })
+        mainWindow.loadURL('http://localhost:5173');
     } else {
-        mainWindow.loadFile(path.join(__dirname, '../client/dist/index.html'))
+        mainWindow.loadFile(path.join(__dirname, '../ui/dist/index.html'));
     }
 
     // Show window only when fully ready — no white flash
